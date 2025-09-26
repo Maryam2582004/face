@@ -11,7 +11,7 @@ eyes = st.selectbox("لون العيون", ["أزرق", "بني", "خضر"])
 skin = st.selectbox("لون البشرة", ["فاتح", "متوسط", "غامق"])
 
 # Hugging Face API Token
-HF_API_TOKEN = "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"
+HF_API_TOKEN = "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"
 client = InferenceClient(token=HF_API_TOKEN)
 
 if st.button("توليد الصورة"):
@@ -21,9 +21,10 @@ if st.button("توليد الصورة"):
 
     # توليد الصورة عبر Hugging Face Inference API
     image_bytes = client.text_to_image(
-    model="stabilityai/stable-diffusion",
+    model="stabilityai/stable-diffusion-2",
     prompt=prompt
 )
+
 
     
     # تحويل الصورة لعرضها في Streamlit
