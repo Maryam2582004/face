@@ -11,7 +11,7 @@ eyes = st.selectbox("لون العيون", ["أزرق", "بني", "خضر"])
 skin = st.selectbox("لون البشرة", ["فاتح", "متوسط", "غامق"])
 
 # Hugging Face API Token
-HF_API_TOKEN = "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"
+HF_API_TOKEN = "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"
 client = InferenceClient(token=HF_API_TOKEN)
 
 if st.button("توليد الصورة"):
