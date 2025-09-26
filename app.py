@@ -43,7 +43,7 @@ st.title("توليد وجه شخص بناءً على الصفات")
 # -------------------------
 # إعداد Hugging Face API
 # -------------------------
-HF_API_TOKEN = "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"  # ضعي هنا التوكن الخاص بك
+HF_API_TOKEN = "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"  # ضعي هنا التوكن الخاص بك
 client = InferenceClient(token=HF_API_TOKEN)
 
 # -------------------------
