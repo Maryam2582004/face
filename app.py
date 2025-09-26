@@ -1,75 +1,35 @@
-# import streamlit as st
-# from huggingface_hub import InferenceClient
-# from PIL import Image
-# import io
-
-# st.title("توليد وجه بناءً على الصفات (مجاني)")
-
-# # إدخال الصفات
-# hair = st.selectbox("لون الشعر", ["بني", "أسود", "أشقر"])
-# eyes = st.selectbox("لون العيون", ["أزرق", "بني", "خضر"])
-# skin = st.selectbox("لون البشرة", ["فاتح", "متوسط", "غامق"])
-
-# # Hugging Face API Token
-# HF_API_TOKEN = "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"
-# client = InferenceClient(token=HF_API_TOKEN)
-
-# if st.button("توليد الصورة"):
-#     prompt = f"فتاة شعر {hair}، عينين {eyes}، بشرة {skin}، وجه واقعي"
-
-#     st.write("جاري توليد الصورة… انتظري قليلاً")
-
-#     # توليد الصورة عبر Hugging Face Inference API
-#     image_bytes = client.text_to_image(
-#     model="stabilityai/stable-diffusion-2",
-#     prompt=prompt
-# )
-
-
-    
-#     # تحويل الصورة لعرضها في Streamlit
-#     image = Image.open(io.BytesIO(image_bytes))
-#     st.image(image, caption=f"الصورة المولدة من الوصف: {prompt}")
-
-
 import streamlit as st
-from huggingface_hub import InferenceClient
-from PIL import Image
-import io
+from PIL import Image, ImageDraw
 
-st.set_page_config(page_title="توليد وجه من الصفات", layout="centered")
-st.title("توليد وجه شخص بناءً على الصفات")
+st.set_page_config(page_title="توليد وجه كرتوني", layout="centered")
+st.title("توليد وجه شخص كرتوني من الصفات")
 
-# -------------------------
-# إعداد Hugging Face API
-# -------------------------
-HF_API_TOKEN = "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"  # ضعي هنا التوكن الخاص بك
-client = InferenceClient(token=HF_API_TOKEN)
+# اختيار الصفات
+hair_color = st.selectbox("لون الشعر", ["brown", "black", "blonde"])
+eye_color = st.selectbox("لون العيون", ["blue", "brown", "green"])
+skin_color = st.selectbox("لون البشرة", ["light", "medium", "dark"])
 
-# -------------------------
-# إدخال الصفات
-# -------------------------
-hair = st.selectbox("لون الشعر", ["بني", "أسود", "أشقر", "أحمر"])
-eyes = st.selectbox("لون العيون", ["أزرق", "بني", "خضر", "رمادي"])
-skin = st.selectbox("لون البشرة", ["فاتح", "متوسط", "غامق"])
-age = st.selectbox("العمر التقريبي", ["طفل", "شاب", "بالغ", "كبير في السن"])
-gender = st.selectbox("الجنس", ["ذكر", "أنثى"])
+# تحديد ألوان RGB لكل خيار
+skin_map = {"light": (255, 224, 189), "medium": (205, 133, 63), "dark": (101, 67, 33)}
+hair_map = {"brown": (101, 67, 33), "black": (0,0,0), "blonde": (255, 224, 102)}
+eye_map = {"blue": (0, 102, 204), "brown": (101, 67, 33), "green": (0, 153, 0)}
 
-if st.button("توليد الصورة"):
-    prompt = f"{gender}، عمر {age}، شعر {hair}، عيون {eyes}، بشرة {skin}، وجه واقعي، صورة عالية الجودة"
-    
-    st.write("جاري توليد الصورة… انتظري قليلاً")
+if st.button("عرض الوجه"):
+    # إنشاء صورة فارغة
+    img = Image.new("RGB", (400, 400), (255, 255, 255))
+    draw = ImageDraw.Draw(img)
 
-    try:
-        # توليد الصورة عبر Hugging Face Stable Diffusion
-        image_bytes = client.text_to_image(
-            model="stabilityai/stable-diffusion-2",
-            prompt=prompt
-        )
+    # رسم الوجه (دائرة للبشرة)
+    draw.ellipse((100, 50, 300, 350), fill=skin_map[skin_color])
 
-        # تحويل الصورة لعرضها في Streamlit
-        image = Image.open(io.BytesIO(image_bytes))
-        st.image(image, caption=f"الصورة المولدة من الوصف: {prompt}")
+    # رسم الشعر (مستطيل فوق الرأس)
+    draw.rectangle((100, 30, 300, 150), fill=hair_map[hair_color])
 
-    except Exception as e:
-        st.error(f"حدث خطأ أثناء توليد الصورة: {e}")
+    # رسم العيون (دوائر صغيرة)
+    draw.ellipse((150, 150, 180, 180), fill=eye_map[eye_color])
+    draw.ellipse((220, 150, 250, 180), fill=eye_map[eye_color])
+
+    # رسم الفم (خط بسيط)
+    draw.line((170, 250, 230, 250), fill=(255,0,0), width=3)
+
+    st.image(img, caption="وجه كرتوني مبسط من الصفات")
