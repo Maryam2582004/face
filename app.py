@@ -20,7 +20,11 @@ if st.button("توليد الصورة"):
     st.write("جاري توليد الصورة… انتظري قليلاً")
 
     # توليد الصورة عبر Hugging Face Inference API
-    image_bytes = client.text_to_image(prompt)
+    image_bytes = client.text_to_image(
+    model="stabilityai/stable-diffusion",
+    prompt=prompt
+)
+
     
     # تحويل الصورة لعرضها في Streamlit
     image = Image.open(io.BytesIO(image_bytes))
